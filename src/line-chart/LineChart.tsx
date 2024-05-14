@@ -846,7 +846,21 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     const legendOffset = this.props.data.legend ? height * 0.15 : 0;
 
     return (
-      <View style={style}>
+      <View style={[style, {flexDirection: 'row'}]}>
+        <Svg height={height + paddingBottom + legendOffset} width={'55'}>
+          <G>
+            {withHorizontalLabels &&
+              this.renderHorizontalLabels(__assign(__assign({}, config), {
+                count: count,
+                data: datas,
+                paddingTop: paddingTop,
+                paddingRight: paddingRight,
+                formatYLabel: formatYLabel,
+                decimalPlaces: chartConfig.decimalPlaces
+              }))}
+          </G>
+        </Svg>
+        <ScrollView horizontal>
         <Svg
           height={height + (paddingBottom as number) + legendOffset}
           width={width - (margin as number) * 2 - (marginRight as number)}
@@ -861,7 +875,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           />
           {this.props.data.legend &&
             this.renderLegend(config.width, legendOffset)}
-          <G x="0" y={legendOffset}>
+          <G x="-50" y={legendOffset}>
             {this.renderDefs({
               ...config,
               ...chartConfig,
@@ -975,6 +989,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             </G>
           </G>
         </Svg>
+          </ScrollView>
         {withScrollableDot && (
           <ScrollView
             style={StyleSheet.absoluteFill}
